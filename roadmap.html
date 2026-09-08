@@ -4,22 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ICTDO Portfolio · Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
   .ganttscroll{ overflow-x:auto; }
-  .gantt{ min-width:920px; }
+  .gantt{ min-width:900px; }
   .gantt-months{
     display:grid;
-    margin-left:220px;
+    margin-left:210px;
     border-bottom:1px solid var(--border);
-    padding-bottom:6px;
-    margin-bottom:4px;
+    padding-bottom:7px;
+    margin-bottom:5px;
   }
   .gantt-month{
     font-family:var(--font-mono);
     font-size:10px;
     letter-spacing:1px;
-    color:var(--text-faint);
+    color:var(--text-dim);
     text-transform:uppercase;
     border-left:1px solid var(--border-soft);
     padding-left:6px;
@@ -32,17 +35,17 @@
     position:relative;
   }
   .gantt-label{
-    width:220px;
-    flex:0 0 220px;
-    padding-right:12px;
-    font-size:12px;
+    width:210px;
+    flex:0 0 210px;
+    padding-right:10px;
+    font-size:12.5px;
     font-weight:600;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
     display:flex;
     align-items:center;
-    gap:7px;
+    gap:8px;
   }
   .gantt-track{
     position:relative;
@@ -56,7 +59,7 @@
   .gantt-grid div{ border-left:1px solid var(--border-soft); }
   .gantt-bar{
     position:absolute;
-    top:9px; height:20px;
+    top:8px; height:20px;
     border-radius:3px;
     display:flex; align-items:center;
     font-family:var(--font-mono);
@@ -84,16 +87,52 @@
   }
   .today-line.labeled::after{
     content:"TODAY";
-    position:absolute; top:-15px; left:4px;
-    font-family:var(--font-mono); font-size:9px; color:var(--danger); letter-spacing:0.5px;
+    position:absolute; top:-17px; left:4px;
+    font-family:var(--font-mono); font-size:9.5px; color:var(--danger); letter-spacing:0.5px;
     white-space:nowrap;
+  }
+  .gantt-view-toggle{
+    display:flex; gap:3px;
+    background:var(--panel-3);
+    border-radius:20px;
+    padding:3px;
+  }
+  .gv-btn{
+    font-family:var(--font-body);
+    font-size:11.5px;
+    font-weight:600;
+    padding:6px 13px;
+    border-radius:16px;
+    border:none;
+    background:transparent;
+    color:var(--text-dim);
+    cursor:pointer;
+  }
+  .gv-btn:hover{ color:var(--text); }
+  .gv-btn.active{
+    background:var(--panel);
+    color:var(--navy);
+    box-shadow:0 1px 2px rgba(22,35,63,0.1);
+  }
+  .gantt-row.person-row{ align-items:stretch; height:auto; }
+  .gantt-label.person-label{
+    display:flex; flex-direction:column; justify-content:center;
+    align-items:flex-start; gap:2px;
+    white-space:normal;
   }
   .backlog-row{
     display:flex; align-items:center; justify-content:space-between;
-    padding:9px 4px; border-bottom:1px solid var(--border-soft);
+    padding:8px 4px; border-bottom:1px solid var(--border-soft);
     font-size:12.5px;
   }
   .backlog-row:last-child{ border-bottom:none; }
+  .backlog-note{
+    display:block;
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    color:var(--text-dim);
+    margin-top:3px;
+  }
 </style>
 </head>
 <body data-page="roadmap.html">
@@ -102,34 +141,42 @@
   <div class="topband-inner">
     <div class="callsign">
       <div class="callsign-text">
-        <h1>ICTDO Master Project Portfolio</h1>
-        <div class="sub">Information &amp; Communications Technology Development Office</div>
+        <h1>ICTDO Systems Development Portfolio</h1>
+        <div class="sub">A portfolio-wide view of all systems ICTDO is currently developing or has been requested to develop, including their status, staffing, priorities, and timelines.</div>
       </div>
     </div>
-    <div class="clock" id="clock"></div>
   </div>
   <div class="pulse">
     <div class="pulse-rail" id="pulseRail"></div>
     <div class="pulse-legend" id="pulseLegend"></div>
   </div>
+</div>
+
+<div class="stickynav">
   <div class="switchboard" id="switchboard"></div>
+  <div class="filterbar" id="filterBar"></div>
 </div>
 
 <div class="wrap">
+  <div class="load-banner" id="loadBanner"></div>
 
   <div class="pagehead">
     <div>
-      <div class="tag">Panel 02 · Timeline</div>
+      <div class="tag">Timeline</div>
       <h2>Project Roadmap / Gantt</h2>
-      <p>Scheduled work plotted against target dates. The source register records no start dates for most systems, so bar starts below are <b style="color:var(--text-dim)">estimated backward from the target date using effort size</b> — treat as directional, not committed.</p>
+      <p>Scheduled work plotted against target dates, with bar durations estimated based on effort size. Timelines are intended to guide planning and may serve as committed schedules where applicable.</p>
     </div>
   </div>
 
   <div class="panel">
     <div class="panel-head">
-      <span class="panel-title">Fig. 05 · <b>Scheduled Timeline — Aug 2026 to Feb 2027</b></span>
-      <span class="note note-sm">■ Bar length ≈ effort-derived duration &nbsp; ⧫ fixed deadline &nbsp; ▤ recurring / ongoing</span>
+      <span class="panel-title"><b>Scheduled Timeline — Aug 2026 to Mar 2027</b></span>
+      <div class="gantt-view-toggle" id="ganttViewToggle">
+        <button class="gv-btn active" data-view="project">By Project</button>
+        <button class="gv-btn" data-view="person">By Person</button>
+      </div>
     </div>
+    <p class="note note-sm" style="margin:-4px 0 12px;">■ Bar length ≈ effort-derived duration &nbsp; ⧫ fixed deadline &nbsp; ▤ recurring / ongoing</p>
     <div class="ganttscroll">
       <div class="gantt" id="ganttChart"></div>
     </div>
@@ -137,19 +184,19 @@
 
   <div class="grid grid-2" style="margin-top:14px;">
     <div class="panel">
-      <div class="panel-head"><span class="panel-title">Panel · <b>Unscheduled</b></span></div>
-      <div class="note" style="margin-bottom:8px;">No target date on file — cannot be placed on the timeline until one is set.</div>
+      <div class="panel-head"><span class="panel-title"><b>Unscheduled</b></span></div>
+      <div class="note" style="margin-bottom:8px;">No target date on file, or the date on file isn't a specific calendar date — cannot be placed on the timeline as-is.</div>
       <div id="backlogList"></div>
     </div>
     <div class="panel">
-      <div class="panel-head"><span class="panel-title">Panel · <b>Completed (Awaiting Updates)</b></span></div>
+      <div class="panel-head"><span class="panel-title"><b>Completed (Awaiting Updates)</b></span></div>
       <div class="note" style="margin-bottom:8px;">Marked complete in the register, with no close-out date recorded yet.</div>
       <div id="completedList"></div>
     </div>
   </div>
 
   <div class="panel" style="margin-top:14px;">
-    <div class="panel-head"><span class="panel-title">Panel · <b>Assumptions</b></span></div>
+    <div class="panel-head"><span class="panel-title"><b>Assumptions</b></span></div>
     <div class="note">
       <b>Duration by effort size</b> (used only when a start date is missing):<br>
       S → 4 weeks &nbsp;·&nbsp; M → 8 weeks &nbsp;·&nbsp; L → 12 weeks &nbsp;·&nbsp; XL → 20 weeks<br><br>
@@ -160,24 +207,25 @@
 
   <div class="foot">
     <span>ICTDO PORTFOLIO CONTROL · ROADMAP DERIVED FROM TARGET DATES + EFFORT SIZE</span>
-    <span>SNAPSHOT AS OF 20 AUG 2026</span>
   </div>
 </div>
 
 <script src="data.js"></script>
 <script src="app.js"></script>
 <script>
-(function(){
+function renderPage(){
+
+  const DATA = filteredProjects();
 
   const RANGE_START = new Date("2026-08-01T00:00:00");
-  const RANGE_END   = new Date("2027-02-28T00:00:00");
+  const RANGE_END   = new Date("2027-03-31T00:00:00");
   const TOTAL_MS = RANGE_END - RANGE_START;
   const TODAY_D = new Date(TODAY + "T00:00:00");
 
   const DURATION_WEEKS = { S:4, M:8, L:12, XL:20 };
-  const PRI_COLOR = { Critical:"#B3261E", High:"#9A6B12", Medium:"#1E4B8F", Low:"#6B7280" };
+  const PRI_COLOR = { Critical:"#9C3148", High:"#8A6D14", Medium:"#3E5C86", Low:"#5B6472" };
 
-  const months = ["AUG 2026","SEP","OCT","NOV","DEC","JAN 2027","FEB"];
+  const months = ["AUG 2026","SEP","OCT","NOV","DEC","JAN 2027","FEB","MAR"];
 
   function pct(date){
     return Math.max(0, Math.min(100, (date - RANGE_START) / TOTAL_MS * 100));
@@ -187,7 +235,7 @@
   const backlog = [];
   const completed = [];
 
-  PROJECTS.forEach(p => {
+  DATA.forEach(p => {
     if(p.status === "Completed"){
       completed.push(p);
       return;
@@ -196,19 +244,24 @@
       scheduled.push({ p, recurring:true, startPct:0, endPct:100 });
       return;
     }
-    if(!p.target_date){
+    if(!p.target_date || !isISODate(p.target_date)){
       backlog.push(p);
       return;
     }
     const end = new Date(p.target_date + "T00:00:00");
-    const weeks = DURATION_WEEKS[p.effort] || 6;
-    let start = new Date(end.getTime() - weeks*7*86400000);
+    let start;
+    if(isISODate(p.start_date)){
+      start = new Date(p.start_date + "T00:00:00"); // real start date on file — use it directly
+    } else {
+      const weeks = DURATION_WEEKS[p.effort] || 6;
+      start = new Date(end.getTime() - weeks*7*86400000); // no real start date — estimate backward from effort
+    }
     let clipped = false;
     if(start < TODAY_D){ start = TODAY_D; clipped = true; }
     scheduled.push({ p, recurring:false, start, end, clipped });
   });
 
-  // ---- render month header ----
+  // ---- render month header (shared by both views) ----
   document.getElementById("ganttChart").innerHTML = `
     <div class="gantt-months" style="grid-template-columns:repeat(${months.length},1fr)">
       ${months.map(m=>`<div class="gantt-month">${m}</div>`).join("")}
@@ -217,15 +270,16 @@
   `;
 
   const todayPct = pct(TODAY_D);
+  const LANE_HEIGHT = 30;
 
-  const sortedRows = scheduled.sort((a,b) => {
+  function renderProjectView(){
+    const sortedRows = scheduled.slice().sort((a,b) => {
       if(a.recurring) return -1;
       if(b.recurring) return 1;
       return a.start - b.start;
     });
 
-  const rowsHTML = sortedRows
-    .map((row, idx) => {
+    const rowsHTML = sortedRows.map((row, idx) => {
       const p = row.p;
       const color = PRI_COLOR[p.priority];
       let barHTML;
@@ -254,23 +308,123 @@
       `;
     }).join("");
 
-  document.getElementById("ganttRows").innerHTML = rowsHTML;
+    document.getElementById("ganttRows").innerHTML = rowsHTML || `<div class="note" style="padding:24px 4px;">No scheduled projects match the current filters.</div>`;
+  }
+
+  function buildPersonRows(){
+    const manpower = buildManpower(DATA);
+    return Object.entries(manpower).map(([name, projs]) => {
+      const recurringBars = [];
+      const timedBars = [];
+      projs.forEach(p => {
+        if(p.status === "Completed") return;
+        if(p.start_date === "Recurring"){ recurringBars.push(p); return; }
+        if(!p.target_date || !isISODate(p.target_date)) return;
+        const end = new Date(p.target_date + "T00:00:00");
+        let start;
+        if(isISODate(p.start_date)){
+          start = new Date(p.start_date + "T00:00:00");
+        } else {
+          const weeks = DURATION_WEEKS[p.effort] || 6;
+          start = new Date(end.getTime() - weeks*7*86400000);
+        }
+        let clipped = false;
+        if(start < TODAY_D){ start = TODAY_D; clipped = true; }
+        timedBars.push({ p, start, end, clipped, startPct: pct(start), endPct: pct(end) });
+      });
+      timedBars.sort((a,b) => a.start - b.start);
+      const laneEnds = [];
+      timedBars.forEach(bar => {
+        let lane = laneEnds.findIndex(e => bar.startPct >= e);
+        if(lane === -1){ lane = laneEnds.length; laneEnds.push(bar.endPct); }
+        else{ laneEnds[lane] = bar.endPct; }
+        bar.lane = lane;
+      });
+      return { name, recurringBars, timedBars, laneCount: laneEnds.length };
+    })
+    .filter(row => row.recurringBars.length || row.timedBars.length)
+    .sort((a,b) => (b.timedBars.length + b.recurringBars.length) - (a.timedBars.length + a.recurringBars.length));
+  }
+
+  function renderPersonView(){
+    const rows = buildPersonRows();
+
+    const rowsHTML = rows.map((row, idx) => {
+      const totalLanes = row.laneCount + row.recurringBars.length;
+      const trackHeight = totalLanes * LANE_HEIGHT + 12;
+
+      const barsHTML = row.timedBars.map(bar => {
+        const p = bar.p;
+        const color = PRI_COLOR[p.priority];
+        const l = bar.startPct, r = bar.endPct;
+        const w = Math.max(r - l, 1.2);
+        const top = bar.lane * LANE_HEIGHT + 6;
+        const flexClass = p.deadline_fixed === "No" ? "flex" : "";
+        return `<div class="gantt-bar ${flexClass}" style="left:${l}%; width:${w}%; top:${top}px; background:${color};" title="${p.project}: ${fmtDate(bar.clipped?TODAY:bar.start.toISOString().slice(0,10))} → ${fmtDate(p.target_date)}${bar.clipped?' (est. start pulled to today)':''}">
+          ${p.project}
+          ${p.deadline_fixed === "Yes" ? '<span class="anchor"></span>' : ''}
+        </div>`;
+      }).join("");
+
+      const recurHTML = row.recurringBars.map((p, i) => {
+        const color = PRI_COLOR[p.priority];
+        const top = (row.laneCount + i) * LANE_HEIGHT + 6;
+        return `<div class="gantt-bar recurring" style="left:0%; width:100%; top:${top}px; background:${color}; opacity:0.55;">
+          ${p.project} — recurring
+        </div>`;
+      }).join("");
+
+      return `
+        <div class="gantt-row person-row" style="height:${trackHeight + 16}px;">
+          <div class="gantt-label person-label"><span>${row.name}</span></div>
+          <div class="gantt-track">
+            <div class="gantt-grid" style="grid-template-columns:repeat(${months.length},1fr)">${months.map(()=>"<div></div>").join("")}</div>
+            <div class="today-line ${idx===0?'labeled':''}" style="left:${todayPct}%"></div>
+            ${recurHTML}
+            ${barsHTML}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    document.getElementById("ganttRows").innerHTML = rowsHTML || `<div class="note" style="padding:24px 4px;">No staffed, scheduled work matches the current filters.</div>`;
+  }
+
+  let currentView = "project";
+  function renderCurrentView(){
+    if(currentView === "person") renderPersonView();
+    else renderProjectView();
+  }
+  renderCurrentView();
+
+  document.getElementById("ganttViewToggle").addEventListener("click", e => {
+    const btn = e.target.closest(".gv-btn");
+    if(!btn) return;
+    currentView = btn.dataset.view;
+    document.querySelectorAll(".gv-btn").forEach(b => b.classList.toggle("active", b === btn));
+    renderCurrentView();
+  });
+
+  const filtersActive = Object.values(getFilterState()).some(Boolean);
 
   document.getElementById("backlogList").innerHTML = backlog.length ? backlog.map(p => `
     <div class="backlog-row">
-      <span>${p.project}</span>
+      <span>${p.project}${p.target_date ? `<span class="backlog-note">on file: ${p.target_date}</span>` : `<span class="backlog-note">no target date on file</span>`}</span>
       <span style="display:flex;gap:8px;align-items:center;">${priorityBadgeHTML(p.priority)}<span class="pill">${p.effort||"—"}</span></span>
     </div>
-  `).join("") : `<div class="note">Every project has a target date on file.</div>`;
+  `).join("") : `<div class="note">${filtersActive ? "No unscheduled projects match the current filters." : "Every project has a plottable target date on file."}</div>`;
 
   document.getElementById("completedList").innerHTML = completed.length ? completed.map(p => `
     <div class="backlog-row">
-      <span>${p.project}</span>
-      <span style="display:flex;gap:8px;align-items:center;">${priorityBadgeHTML(p.priority)}<span class="pill" style="color:var(--ok); border-color:rgba(27,122,77,0.3); background:var(--ok-bg);">COMPLETED</span></span>
+      <span>${p.project}${p.target_date ? `<span class="backlog-note">${p.target_date}</span>` : ""}</span>
+      <span style="display:flex;gap:8px;align-items:center;">${priorityBadgeHTML(p.priority)}<span class="pill" style="color:var(--ok); border-color:rgba(35,107,95,0.3); background:var(--ok-bg);">COMPLETED</span></span>
     </div>
-  `).join("") : `<div class="note">No projects currently marked complete.</div>`;
+  `).join("") : `<div class="note">${filtersActive ? "No completed projects match the current filters." : "No projects currently marked complete."}</div>`;
 
-})();
+  updateFilterCount(DATA.length, PROJECTS.length);
+
+}
+bootstrap(renderPage);
 </script>
 </body>
 </html>
